@@ -97,12 +97,12 @@ clientEmbed = EmbeddingsClient(endpoint=endpoint, credential=AzureKeyCredential(
 async def generate_vector(description: str) -> list:
     response = clientEmbed.embed(input=[description], model=model_name)
     
-    # for item in response.data:
-    #     length = len(item.embedding)
-    #     print(
-    #         f"data[{item.index}]: length={length}, "
-    #         f"[{item.embedding[0]}, {item.embedding[1]}, "
-    #         f"..., {item.embedding[length-2]}, {item.embedding[length-1]}]"
-    #     )
-    print(response.usage)
+    for item in response.data:
+        length = len(item.embedding)
+        print(
+            f"data[{item.index}]: length={length}, "
+            f"[{item.embedding[0]}, {item.embedding[1]}, "
+            f"..., {item.embedding[length-2]}, {item.embedding[length-1]}]"
+        )
+    print(response.usage, response)
     return response.usage
