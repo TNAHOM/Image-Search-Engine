@@ -1,5 +1,4 @@
 import asyncio
-import random
 from ..database import insert_image_data
 from ..openai_utils import generate_vector
 

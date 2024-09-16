@@ -1,14 +1,12 @@
 import os
 import asyncpg
 from dotenv import load_dotenv
+# from pgvector.asyncpg import register_vector
+from DB.psycopg2_connection import get_connection
 
 load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
-
-
-async def get_connection():
-    return await asyncpg.connect(DATABASE_URL)
 
 
 async def create_table():
@@ -35,20 +33,18 @@ async def create_table():
 
     await conn.close()
 
-
-async def insert_image_data(image_url: str, description: str, embedding: list):
+async def insert_image_data(image_url: str, description: str, embedding):
     conn = await get_connection()
-    embedding_str = '[' + ",".join(map(str, embedding)) + ']'
-
-    # Insert image URL, description, and vectorized embedding
-    await conn.execute(
-        """
-        INSERT INTO items (image_url, description, embedding)
-        VALUES ($1, $2, $3)
-        """,
-        image_url,
-        description,
-        embedding_str,  # Embedding is directly inserted as a list (asyncpg handles the vector type)
-    )
-
-    await conn.close()
+    try:
+        # Insert image URL, description, and vectorized embedding
+        await conn.execute(
+            """
+            INSERT INTO items (image_url, description, embedding)
+            VALUES ($1, $2, $3)
+            """,
+            image_url,
+            description,
+            embedding,  # Embedding as a list (asyncpg handles the vector type)
+        )
+    finally:
+        await conn.close()

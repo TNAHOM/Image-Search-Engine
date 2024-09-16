@@ -15,6 +15,7 @@ async def upload_to_google_drive(file_path: str) -> str:
     creds = Credentials.from_service_account_file(GOOGLE_CREDENTIALS, scopes=SCOPES)
     service = build("drive", "v3", credentials=creds)
 
+    # Upload the file
     file_metadata = {"name": os.path.basename(file_path)}
     media = MediaFileUpload(file_path, resumable=True)
 
@@ -24,4 +25,12 @@ async def upload_to_google_drive(file_path: str) -> str:
         .execute()
     )
 
-    return f"https://drive.google.com/uc?id={file.get('id')}"
+    file_id = file.get("id")
+
+    # Make the file accessible to the specified user email
+    service.permissions().create(
+        fileId=file_id,
+        body={"role": "writer", "type": "user", "emailAddress": "nahomt2419@gmail.com"},
+    ).execute()
+
+    return f"https://drive.google.com/uc?id={file_id}"
