@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+python-multipart
+aiofiles
+asyncpg
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+openai
+python-dotenv
+numpy
+psycopg2
+pgvector
+azure-ai-inference
