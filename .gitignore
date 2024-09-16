@@ -3,5 +3,10 @@ backend/.env
 backend/google_credentials.json
 backend/venv
 
+.venv/
+
 # Ignore node_modules in the frontend directory
+frontend/node_modules/
+
+
 # frontend/node_modules/
