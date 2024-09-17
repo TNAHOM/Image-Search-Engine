@@ -8,15 +8,16 @@ from database import insert_image_data
 from google_drive import upload_to_google_drive
 from openai_utils import generate_image_description, generate_vector
 from updated_query import llm_query
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()  # Load environment variables
 
 app = FastAPI()
-
+origins = ["http://localhost:3000"]
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000"],  # Adjust this to your frontend URL
+    allow_origins=origins,  # Adjust this to your frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -59,8 +60,8 @@ async def upload_image(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-async def text_to_vector_search(query_text: str):
-    # Updates the search quesry using llms
+async def text_to_vector_search(query_text: str, threshold=0.6):
+    # Update the search query using LLMs
     update_text = llm_query(query_text)
     if update_text == "nothing":
         return "nothing"
@@ -76,29 +77,43 @@ async def text_to_vector_search(query_text: str):
     query = f"""
         SELECT id, image_url, description, (embedding {operator} $1) AS score
         FROM items
+        WHERE (embedding {operator} $1) >= $2
         ORDER BY score ASC;
     """
 
     # Use asyncpg's `fetch` method to run the query
-    results = await conn.fetch(query, query_embedding)
+    results = await conn.fetch(query, query_embedding, threshold)
 
     await conn.close()  # Ensure to close the connection
+
+    # Print all results
+    for x in results:
+        print(x)
 
     return results
 
 
 @app.get("/search/")
 async def search_images(query_text: str = Query(..., description="Text to search by")):
-    """
-    Search for images based on a text query using vector similarity.
-    """
     try:
-        # Perform the vector search
         results = await text_to_vector_search(query_text)
         if not results or results == "nothing":
             return {"status": "no results", "results": []}
         return {"status": "success", "results": results}
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/images/")
+async def list_images():
+    try:
+        conn = await get_connection()
+        query = "SELECT image_url, description FROM items;"
+        results = await conn.fetch(query)
+        await conn.close()
+        return {"images": results}
+    except Exception as e:
+        print(f"Error in /images/ endpoint: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

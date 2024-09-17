@@ -3,7 +3,7 @@ from backend.DB.psycopg2_connection import get_connection
 from backend.openai_utils import generate_vector
 
 
-async def text_to_vector_search(query_text: str, top_n=5):
+async def text_to_vector_search(query_text: str, top_n=5, threshold=0.5):
     # Generate the embedding for the query text
     query_embedding = await generate_vector(query_text)
 
@@ -12,16 +12,17 @@ async def text_to_vector_search(query_text: str, top_n=5):
 
     operator = "<=>"
 
-    # Perform the query using asyncpg's `fetch` method
+    # Perform the query using asyncpg's fetch method
     query = f"""
         SELECT id, image_url, description, (embedding {operator} $1) AS score
         FROM items
+        WHERE (embedding {operator} $1) <= $3
         ORDER BY score ASC
         LIMIT $2;
     """
 
-    # Use asyncpg's `fetch` method to run the query
-    results = await conn.fetch(query, query_embedding, top_n)
+    # Use asyncpg's fetch method to run the query
+    results = await conn.fetch(query, query_embedding, top_n, threshold)
 
     await conn.close()  # Ensure to close the connection
 

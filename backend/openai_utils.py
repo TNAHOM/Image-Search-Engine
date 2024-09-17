@@ -24,7 +24,7 @@ load_dotenv()
 # You are a helpfull clothier that will let users describe their only the cloth from the image based color, Embellishment of the cloth, Pattern or Design, Includes any noticeable structural features that define the garment's overall silhouette and aesthetic.
 systemPrompt = """
 You are a helpfull clothier that will let users list the keywords of the feature and type of the cloth(if its tshirt or dress, shirt, pants or etc...) from the image based color, Embellishment of the cloth, Pattern or Design, Includes any noticeable structureal feature or specific type of the cloth. 
-Describe if only that feature or type or any requirments listed before is vissible or can be clearly described. Add to the json fomrat only a keyword or a phrase. But on the Other section describe the image in detail that wasn't mentioned previously.
+Describe if only that feature or type or any requirments listed before is vissible or can be clearly described. Add to the json fomrat only a keyword or a phrase. But on the Other section describe the cloth in the image in detail that wasn't mentioned previously.
 Return the flashcards in the following JSON format:
 {
   "description": [
