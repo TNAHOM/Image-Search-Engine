@@ -129,12 +129,6 @@ Contributions to the Image Search Engine project are welcome! Please follow thes
 4. Push to the branch: `git push origin feature-branch-name`
 5. Submit a pull request
 
-Please ensure your code adheres to the project's coding standards and include tests for new features.
-
-## License
-
-This project is licensed under the MIT License.
-
 ## Contact
 
 For any inquiries or issues, please open an issue on the [GitHub repository](https://github.com/TNAHOM/Image-Search-Engine/issues).
