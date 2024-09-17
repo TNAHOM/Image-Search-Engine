@@ -77,7 +77,7 @@ async def text_to_vector_search(query_text: str, threshold=0.6):
     query = f"""
         SELECT id, image_url, description, (embedding {operator} $1) AS score
         FROM items
-        WHERE (embedding {operator} $1) >= $2
+        WHERE (embedding {operator} $1) <= $2
         ORDER BY score ASC;
     """
 
@@ -111,6 +111,7 @@ async def list_images():
         query = "SELECT image_url, description FROM items;"
         results = await conn.fetch(query)
         await conn.close()
+        print(results)
         return {"images": results}
     except Exception as e:
         print(f"Error in /images/ endpoint: {e}")

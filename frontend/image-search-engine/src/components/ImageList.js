@@ -69,10 +69,12 @@ const ImageList = () => {
                     const url = image.image_url;
                     const params = new URLSearchParams(new URL(url).search);
                     const fileId = params.get('id');
+                    console.log(`https://drive.google.com/thumbnail?id=${fileId}`, '--+++++')
 
                     return (
                         <div key={index} className="image-card bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                             <div className="aspect-w-16 aspect-h-9 bg-gray-100">
+                                
                                 <img
                                     src={`https://drive.google.com/thumbnail?id=${fileId}`}
                                     alt={image.description}
