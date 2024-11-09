@@ -1,8 +1,8 @@
-# Image Search Engine
+# Image Search Engine (RAG-Retrieval-Augmented Generation)
 
 ## Description
 
-This project is a modern web application that allows users to upload images, search through them, and view the results in an elegant interface. It features a responsive design, drag-and-drop image upload functionality, and a powerful search capability using vector embeddings for enhanced accuracy.
+The Image Search Engine is a modern AI-powered web application leveraging Retrieval-Augmented Generation (RAG) to combine large language models (LLMs) with advanced image retrieval techniques. Designed for seamless user experience, this tool allows users to upload and search through images in a highly accurate, visually engaging way. Utilizing vector embeddings through OpenAI's models, the engine achieves context-aware search results that surpass traditional keyword-based searches—ideal for image-heavy applications like e-commerce.
 
 ## Features
 
